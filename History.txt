@@ -1,3 +1,6 @@
+== 0.3.x
+  * add migration in frozen mode support for merb
+
 == 0.3.4 / 2008-06-17
   * rake install_gem_no_doc for faster install
   * set role to db for backup_name task

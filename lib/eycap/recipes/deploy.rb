@@ -34,9 +34,11 @@ Capistrano::Configuration.instance(:must_exist).load do
       set :merb_env, "production"
       set :migrate_env, ""
       set :migrate_target, :latest
+      set :frozen, true
     DESC
     task :migrate, :roles => :db, :only => { :primary => true } do
       rake = fetch(:rake, "rake")
+      frozen = fetch(:frozen, nil)
       
       framework = fetch(:framework, "rails")
       if framework.match(/^rails$/i)
@@ -54,7 +56,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         else raise ArgumentError, "unknown migration target #{migrate_target.inspect}"
         end
  
-      run "cd #{directory}; #{rake} #{framework.upcase}_ENV=#{app_env} #{migrate_env} db:migrate"
+      run "cd #{directory}; #{rake} #{framework.upcase}_ENV=#{app_env} #{migrate_env} db:migrate #{"FROZEN=true" if frozen}"
     end
   
     desc "Display the maintenance.html page while deploying with migrations. Then it restarts and enables the site again."
